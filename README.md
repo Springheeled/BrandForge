@@ -1,5 +1,7 @@
 # BrandForge
 
+BrandForge exists to accelerate Bellamy Technologies Ltd. If a feature does not materially improve brand discovery, it should not be built.
+
 Internal brand discovery engine for Bellamy Technologies Ltd.
 
 ## Purpose
