@@ -1,0 +1,16 @@
+sh
+ch
+m
+n
+l
+r
+b
+d
+v
+br
+bl
+tr
+dr
+st
+nd
+mp

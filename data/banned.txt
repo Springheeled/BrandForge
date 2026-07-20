@@ -1,0 +1,15 @@
+pack
+ship
+parcel
+warehouse
+logistics
+cargo
+pick
+tik
+shopify
+spotify
+google
+apple
+amazon
+microsoft
+pigeon
