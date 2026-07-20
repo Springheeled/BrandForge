@@ -13,3 +13,7 @@ apple
 amazon
 microsoft
 pigeon
+tech
+solutions
+systems
+sales

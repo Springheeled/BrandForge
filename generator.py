@@ -1,20 +1,42 @@
-import random
 from dictionary import load_list
 from filters import valid
-from scoring import score
+from scoring import score_candidate
 from config import MIN_LENGTH,MAX_LENGTH
+from territories import iter_candidates
+
+
 def normalise_name(n): return n.capitalize()
+
+
 def generate_candidates(count):
- p=load_list("prefixes.txt");m=load_list("middles.txt");s=load_list("suffixes.txt");b=load_list("banned.txt")
- out=[];rej=[];seen=set()
- pats=[("p+m+s",lambda:random.choice(p)+random.choice(m)+random.choice(s)),
- ("p+s",lambda:random.choice(p)+random.choice(s)),
- ("p+m+m+s",lambda:random.choice(p)+random.choice(m)+random.choice(m)+random.choice(s))]
- while len(out)<count:
-  pat,f=random.choice(pats);n=f()
+ b=load_list("banned.txt")
+ out={}
+ rej=[]
+ for n,territory,kind,sources in iter_candidates():
   ok,r=valid(n,b,MIN_LENGTH,MAX_LENGTH)
-  if not ok: rej.append((n,r));continue
-  if n in seen: continue
-  seen.add(n);out.append((normalise_name(n),score(n),len(n),pat))
- out.sort(key=lambda x:x[1],reverse=True)
- return out,rej
+  if not ok:
+   rej.append((n,r))
+   continue
+  scores=score_candidate(n,territory,kind,sources)
+  row=(
+   normalise_name(n),
+   scores["pronunciation"],
+   len(n),
+   "meaning:"+kind,
+   scores["meaning"],
+   scores["rhythm"],
+   scores["memorability"],
+   scores["warmth"],
+   scores["professionalism"],
+   scores["overall"],
+   territory.name,
+   "+".join(sources),
+  )
+  existing=out.get(n)
+  if existing is None or row[9]>existing[9]:
+   out[n]=row
+ rows=sorted(
+  out.values(),
+  key=lambda row:(-row[9],-row[4],-row[6],row[0].lower()),
+ )
+ return rows[:count],rej
